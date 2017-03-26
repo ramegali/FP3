@@ -41,9 +41,10 @@ define (extract-pcdata some-content)
 ```
 
 I ran into issues trying to use weather underground's html file, so I used the one I wrote in FP1.
-*Here's a screenshot of the resulting output:*
 
-![alt tag](https://github.com/ramegali/FP1/blob/master/FP3_output.png)
+*Screenshot of the resulting output:*
+
+![alt tag](https://github.com/ramegali/FP3/blob/master/FP3_output.png)
 
 The next step would be to get the necessary information from weather underground after getting the html info.
 
