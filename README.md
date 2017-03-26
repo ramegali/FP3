@@ -1,51 +1,49 @@
-# FP3: Final Project Assignment 3: Exploration 2
-Due Sunday, March 26, 2017
+## html-parsing library
+**My name:** Raphael Megali
 
-This assignment is the same as [FP1], except definitely choose a library that you expect to use for your full project.
+I built off of sample code as well as some of the things I did in FP1 to try my hand at some html-parsing.
+The program takes the html file as an input file, reads it as a string, and outputs the different parts of the html file (head, body, elements, etc.) to the screen. 
 
-You will be in your team before you complete this assignment. You and your teammate(s) must coordinate to (1) both choose libraries relevant to your project, and (2) each choose a different library.
+## The project:
+Our goal for this project is to find a way to display relevent current weather and time information on a webpage. We will try to scrape this info from weather underground's website. The code above gets the url provided, intiates a few different requests for it, and returns a pure port HTML connection corresponding to the body of the response.
 
-The report template is below, beginning with "Library Name Here."
+**Code exerpt:**
+```
+(require net/url)
+  (require html)
 
-## How to Prepare and Submit This Assignment
+  (define myurl (string->url "https://www.wunderground.com/q/zmw:01850.1.99999"))
+  (define myport (get-pure-port myurl)
+```
 
-1. To start, [**fork** this repository][forking]. 
-1. Add your `.rkt` Racket source file(s) to the repository. 
-1. Add any images to the repository.
-1. Modify the `README.md` file and [**commit**][ref-commit] changes to complete your report.
-1. Ensure your changes (report in `md` file, added `rkt` file(s), and images) are committed to your forked repository.
-1. [Create a **pull request**][pull-request] on the original repository to turn in the assignment.
+After defining **in** as the input file with the html code, it is read in as a string by the program:
+```
+(define an-html
+    (h:read-xhtml
+     (open-input-string
+      (string-append (port->string in)))))
+```
 
-## Library Name Here
-My name: **put your real name here**
+**some-content** here corresonds to the **an-html** element created above. This code will parse through the extracted string to pull the information requested. In this current state, it just pulls the different html elements and displays them.
+```
+define (extract-pcdata some-content)
+    (cond [(x:pcdata? some-content)
+           (list (x:pcdata-string some-content))]
+          [(x:entity? some-content)
+           (list)]
+          [else
+           (extract-pcdata-from-element some-content)]))
+ 
+  (define (extract-pcdata-from-element an-html-element)
+    (match an-html-element
+      [(struct h:html-full (attributes content))
+       (apply append (map extract-pcdata content))]
+```
 
-Write what you did!
-Remember that this report must include:
+I ran into issues trying to use weather underground's html file, so I used the one I wrote in FP1.
+*Here's a screenshot of the resulting output:*
 
-* a narrative of what you did
-* highlights of code that you wrote, with explanation
-* output from your code demonstrating what it produced
-* at least one diagram or figure showing your work
+![alt tag](https://github.com/ramegali/FP1/blob/master/FP3_output.png)
 
-The narrative itself should be no longer than 350 words. 
+The next step would be to get the necessary information from weather underground after getting the html info.
 
-You need at least one image (output, diagrams). Images must be uploaded to your repository, and then displayed with markdown in this file; like this:
-
-![test image](/testimage.png?raw=true "test image")
-
-You must provide credit to the source for any borrowed images.
-
-Code should be delivered in two ways:
-
-1. Full files should be added to your version of this repository.
-1. Key excerpts of your code should be copied into this .md file, formatted to look like code, and explained.
-
-<!-- Links -->
-[FP1]: https://github.com/oplS17projects/FP1
-[schedule]: https://github.com/oplS17projects/FP-Schedule
-[markdown]: https://help.github.com/articles/markdown-basics/
-[forking]: https://guides.github.com/activities/forking/
-[ref-clone]: http://gitref.org/creating/#clone
-[ref-commit]: http://gitref.org/basic/#commit
-[ref-push]: http://gitref.org/remotes/#push
-[pull-request]: https://help.github.com/articles/creating-a-pull-request
